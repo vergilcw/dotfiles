@@ -6,6 +6,11 @@ if empty(glob('~/.vim/autoload/plug.vim'))
 	    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
     endif
 
+
+set showcmd "show when a command key is pressed/active
+let maplocalleader = "\"
+let mapleader = ","
+
 call plug#begin()
 Plug 'sheerun/vim-polyglot'
 "Plug 'maralla/completor.vim' 
