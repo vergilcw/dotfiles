@@ -14,7 +14,7 @@ dotfiledir=${homedir}/dotfiles
 
 # list of files/folders to symlink in ${homedir}
 #files="bash_profile bashrc bash_prompt aliases private vimrc tmux"
-files="vimrc gitconfig"
+files="vimrc gitconfig tmux.conf"
 
 # change to the dotfiles directory
 echo "Changing to the ${dotfiledir} directory"
@@ -24,7 +24,7 @@ echo "...done"
 # create symlinks (will overwrite old dotfiles)
 for file in ${files}; do
 	    echo "Creating symlink to $file in home directory."
-	        ln -sf ${homedir}/${dotfiledir}/${file} ${homedir}/.${file}
+	        ln -sf ${dotfiledir}/${file} ${homedir}/.${file}
 	done
 
 	
