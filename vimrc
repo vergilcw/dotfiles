@@ -19,6 +19,9 @@ call plug#end()
 
 let g:slime_target = "tmux"
 let g:slime_default_config = {"socket_name": "default", "target_pane": "{right-of}"}
-xmap <c-c><c-c> <Plug>SlimeRegionSend
-nmap <c-c><c-c> <Plug>SlimeParagraphSend
+"Map hotkey to run code as Ctrl-/ (synonym for Ctrl-_)
+xmap <c-_> <Plug>SlimeRegionSend 
+"nmap <c-_> <Plug>SlimeParagraphSend
+nmap <c-_> <Plug>SlimeLineSend
 nmap <c-c>v     <Plug>SlimeConfig
+
