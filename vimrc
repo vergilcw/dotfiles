@@ -1,5 +1,9 @@
 set showcmd "show when a command key is pressed/active
-let maplocalleader = ","
+let maplocalleader = "\"
+let mapleader = ","
+
+"navigating buffers made easier: <leader>+l
+nnoremap <leader>l :ls<CR>:b<space>
 
 "This auto-installs vim-plug in case it's not already loaded:
 if empty(glob('~/.vim/autoload/plug.vim'))
