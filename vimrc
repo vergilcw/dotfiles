@@ -1,6 +1,6 @@
 set showcmd "show when a command key is pressed/active
-let maplocalleader = "\"
-let mapleader = ","
+let maplocalleader = '\\'
+let mapleader = ','
 
 "navigating buffers made easier: <leader>+l
 nnoremap <leader>l :ls<CR>:b<space>
