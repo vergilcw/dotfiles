@@ -1,3 +1,14 @@
+set number "show line numbers
+set numberwidth=3
+set number relativenumber "enabling both rel and absolute gives hybrid
+
+augroup numbertoggle "turn off relative line numbers in insert mode
+  autocmd!
+  autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
+  autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
+augroup END
+
+
 set showcmd "show when a command key is pressed/active
 let maplocalleader = ","
 
@@ -21,7 +32,7 @@ let g:slime_target = "tmux"
 let g:slime_default_config = {"socket_name": "default", "target_pane": "{right-of}"}
 "Map hotkey to run code as Ctrl-/ (synonym for Ctrl-_)
 xmap <c-_> <Plug>SlimeRegionSend 
-"nmap <c-_> <Plug>SlimeParagraphSend
+let g:slime_dont_ask_default = 1
 nmap <c-_> <Plug>SlimeLineSend
 nmap <c-c>v     <Plug>SlimeConfig
 
