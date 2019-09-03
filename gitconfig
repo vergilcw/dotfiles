@@ -1,3 +1,6 @@
 [user]
 	email = vergilcw@gmail.com
 	name = Vergil Weatherford
+[core]
+	autocrlf = false
+	eol = lf
