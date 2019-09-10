@@ -2,6 +2,17 @@ set number "show line numbers
 set numberwidth=3
 set number relativenumber "enabling both rel and absolute gives hybrid
 
+set tabstop=2 shiftwidth=2 expandtab "tabs as spaces
+
+
+"Make Ctrl-Shift-j/k move lines up or down.
+nnoremap <C-j> :m .+1<CR>==
+nnoremap <C-k> :m .-2<CR>==
+inoremap <C-j> <Esc>:m .+1<CR>==gi
+inoremap <C-k> <Esc>:m .-2<CR>==gi
+vnoremap <C-j> :m '>+1<CR>gv=gv
+vnoremap <C-k> :m '<-2<CR>gv=gv
+
 augroup numbertoggle "turn off relative line numbers in insert mode
   autocmd!
   autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
@@ -12,6 +23,8 @@ augroup END
 set showcmd "show when a command key is pressed/active
 let maplocalleader = ","
 
+
+""" VIM PLUG PLUGINS AND CONFIG
 "This auto-installs vim-plug in case it's not already loaded:
 if empty(glob('~/.vim/autoload/plug.vim'))
   silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
@@ -19,15 +32,14 @@ if empty(glob('~/.vim/autoload/plug.vim'))
     autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
     endif
 
+"load plugins
 call plug#begin()
 Plug 'sheerun/vim-polyglot'
 Plug 'christoomey/vim-tmux-navigator'   "better tmux bindings
 Plug 'melonmanchan/vim-tmux-resizer'    "better tmux bindings
+Plug 'jpalardy/vim-slime'               "connect to a REPL
 
-Plug 'jpalardy/vim-slime'             "connect to a REPL
-"Plug 'jalvesaq/Nvim-R'
-call plug#end()
-
+"settings for REPL to send-code via vim-slime
 let g:slime_target = "tmux"
 let g:slime_default_config = {"socket_name": "default", "target_pane": "{right-of}"}
 "Map hotkey to run code as Ctrl-/ (synonym for Ctrl-_)
