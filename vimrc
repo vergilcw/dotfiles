@@ -42,6 +42,7 @@ Plug 'sheerun/vim-polyglot'
 Plug 'christoomey/vim-tmux-navigator'   "better tmux bindings
 Plug 'melonmanchan/vim-tmux-resizer'    "better tmux bindings
 Plug 'jpalardy/vim-slime'               "connect to a REPL
+call plug#end()
 
 "settings for REPL to send-code via vim-slime
 let g:slime_target = "tmux"
