@@ -4,6 +4,10 @@ set number relativenumber "enabling both rel and absolute gives hybrid
 
 set tabstop=2 shiftwidth=2 expandtab "tabs as spaces
 
+"navigate through soft wrap lines with j and k while preserving relative
+"numbering navigation.
+nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
+nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
 
 "Make Ctrl-Shift-j/k move lines up or down.
 nnoremap <C-j> :m .+1<CR>==
