@@ -48,6 +48,19 @@ RUN sudo apt update && sudo apt install -y \
       r-base
       r-base-dev
       google-cloud-sdk
+      python3
+
+      #ggmaps
+      libgdal20
+      libgdal-dev
+      libssl-dev
+
+      # required for cv
+      texlive-xetex
+      texlive-fonts-extra
+      texlive-bibtex-extra
+      texlive-luatex
+
 
       #to look into: 
       # lastpass-cli

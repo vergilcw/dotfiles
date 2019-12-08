@@ -1,4 +1,5 @@
 set -o vi
+export TERM=xterm-256color
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
