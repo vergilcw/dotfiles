@@ -1,0 +1,24 @@
+/var/log/apt/history.log:Commandline: apt-get -y dist-upgrade
+/var/log/apt/history.log:Commandline: apt-get -y install dialog ifupdown isc-dhcp-client locales netbase net-tools openssh-client vim
+/var/log/apt/history.log:Commandline: apt-get install iproute2 init -y
+/var/log/apt/history.log:Commandline: apt-get -q -y install apt-transport-https ca-certificates
+/var/log/apt/history.log:Commandline: apt-get -q -y --no-install-recommends install python3
+/var/log/apt/history.log:Commandline: apt-get -q -y --allow-unauthenticated install cros-guest-tools
+/var/log/apt/history.log:Commandline: apt-get install tmux
+/var/log/apt/history.log:Commandline: apt install -y gnupg2
+/var/log/apt/history.log:Commandline: apt install -y r-base
+/var/log/apt/history.log:Commandline: apt install -y r-base
+/var/log/apt/history.log:Commandline: apt install -y r-base-dev
+/var/log/apt/history.log:Commandline: apt upgrade
+/var/log/apt/history.log:Commandline: apt-get install google-cloud-sdk
+/var/log/apt/history.log:Commandline: apt autoremove
+/var/log/apt/history.log:Commandline: apt install libgdal20
+/var/log/apt/history.log:Commandline: apt install libgdal-dev
+/var/log/apt/history.log:Commandline: apt install libssl-dev
+/var/log/apt/history.log:Commandline: apt install texlive-xetex
+/var/log/apt/history.log:Commandline: apt install texlive-fonts-extra
+/var/log/apt/history.log:Commandline: apt install texlive-bibtex-extra
+/var/log/apt/history.log:Commandline: apt install texlive-luatex
+/var/log/apt/history.log:Commandline: apt install inotify-tools
+/var/log/apt/history.log:Commandline: apt install p7zip-full
+/var/log/apt/history.log:Commandline: apt install fonts-powerline
