@@ -45,6 +45,18 @@ Plug 'christoomey/vim-tmux-navigator'   "better tmux bindings
 Plug 'melonmanchan/vim-tmux-resizer'    "better tmux bindings
 Plug 'jpalardy/vim-slime'               "connect to a REPL
 Plug 'lifepillar/vim-solarized8'        "solarized colors
+
+"github.com/gaalcaras/ncm-R  (fast autocompletion for R)
+Plug 'ncm2/ncm2'
+Plug 'roxma/nvim-yarp'
+Plug 'jalvesaq/Nvim-R'
+Plug 'gaalcaras/ncm-R'
+
+"Vim 8 only
+if !has('nvim')
+    Plug 'roxma/vim-hug-neovim-rpc'
+    endif
+
 call plug#end()
 
 "settings for REPL to send-code via vim-slime
@@ -67,4 +79,4 @@ if $TERM == "xterm-256color"
 
 "https://github.com/lifepillar/vim-solarized8
 set background=dark
-colorscheme solarized8_high
+colorscheme solarized8_flat
