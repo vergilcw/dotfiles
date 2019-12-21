@@ -48,19 +48,7 @@ Plug 'sheerun/vim-polyglot'
 Plug 'christoomey/vim-tmux-navigator'   "better tmux bindings
 Plug 'melonmanchan/vim-tmux-resizer'    "better tmux bindings
 Plug 'jpalardy/vim-slime'               "connect to a REPL
-Plug 'lifepillar/vim-solarized8'        "solarized colors
-
-"github.com/gaalcaras/ncm-R  (fast autocompletion for R)
-"Plug 'ncm2/ncm2'
-"Plug 'roxma/nvim-yarp'
-"Plug 'jalvesaq/Nvim-R'
-"Plug 'gaalcaras/ncm-R'
-
-"Vim 8 only
-if !has('nvim')
-    Plug 'roxma/vim-hug-neovim-rpc'
-    endif
-
+Plug 'chriskempson/base16-vim'          "16-bit vim colors (for compatibility)
 call plug#end()
 
 "settings for REPL to send-code via vim-slime
@@ -72,15 +60,4 @@ let g:slime_dont_ask_default = 1
 nmap <c-_> <Plug>SlimeLineSend
 nmap <c-c>v     <Plug>SlimeConfig
 
-
-"Get colors to show up correctly:
-"let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-"let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-"if $TERM == "xterm-256color"
-"    set t_Co=256
-"  endif
-
-
-"https://github.com/lifepillar/vim-solarized8
-"set background=dark
-"colorscheme solarized8_flat
+"colorscheme base16-default-dark

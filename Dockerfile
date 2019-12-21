@@ -71,6 +71,7 @@ RUN sudo apt update && sudo apt install -y \
       # python-pip \
       # python3-dev \
       # python3-pip \
+      # python-virtualenvwrapper \
       # language-pack-en \
       # docker.io \
       # docker-compose \
@@ -102,6 +103,9 @@ RUN echo $TZ > /etc/timezone && \
 git clone http://github.com/vergilcw/dotfiles
 dotfiles/make_links.sh ~
 
+mkdir ~/.vim/colors
+wget --directory-prefix=/home/vergilcw/.vim/colors "https://raw.githubusercontent.com/jeffkreeftmeijer/vim-dim/master/colors/dim.vim"
+wget --directory-prefix=/home/vergilcw/.vim/colors "https://raw.githubusercontent.com/jeffkreeftmeijer/vim-dim/master/colors/default-light.vim"
 
 # Config vim
 RUN vim +'PlugInstall --sync' +qall +silent
