@@ -1,6 +1,11 @@
 set number "show line numbers
 set numberwidth=3
 set number relativenumber "enabling both rel and absolute gives hybrid
+set textwidth=80
+set colorcolumn=81,161,241,321,401,481,561,641,721,801 "show up to 10 wrapped lines, first col highlighted
+set formatoptions+=t
+
+set esckeys
 
 set tabstop=2 shiftwidth=2 expandtab "tabs as spaces
 
@@ -22,6 +27,9 @@ augroup numbertoggle "turn off relative line numbers in insert mode
   autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
   autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
 augroup END
+
+"in visual mode, control+R then <search term> then <enter> for find/replace
+vnoremap <C-r> "hy:%s/<C-r>h//gc<left><left><left>
 
 
 set showcmd "show when a command key is pressed/active
@@ -46,7 +54,7 @@ if empty(glob('~/.vim/autoload/plug.vim'))
 call plug#begin()
 Plug 'sheerun/vim-polyglot'
 Plug 'christoomey/vim-tmux-navigator'   "better tmux bindings
-Plug 'melonmanchan/vim-tmux-resizer'    "better tmux bindings
+Plug 'RyanMillerC/better-vim-tmux-resizer' "improved resizing vs. vim-tmux-resizer
 Plug 'jpalardy/vim-slime'               "connect to a REPL
 Plug 'chriskempson/base16-vim'          "16-bit vim colors (for compatibility)
 call plug#end()
