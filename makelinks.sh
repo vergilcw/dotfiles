@@ -14,7 +14,7 @@ dotfiledir=${homedir}/dotfiles
 
 # list of files/folders to symlink in ${homedir}
 #files="bash_profile bashrc bash_prompt aliases private vimrc tmux"
-files="bashrc vimrc gitconfig tmux.conf"
+files="bashrc vimrc tmux.conf"
 
 # change to the dotfiles directory
 echo "Changing to the ${dotfiledir} directory"
