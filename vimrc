@@ -2,7 +2,7 @@ set number "show line numbers
 set numberwidth=3
 set number relativenumber "enabling both rel and absolute gives hybrid
 set textwidth=80
-set colorcolumn=81,161,241,321,401,481,561,641,721,801 "show up to 10 wrapped lines, first col highlighted
+"set colorcolumn=81,161,241,321,401,481,561,641,721,801 "show up to 10 wrapped lines, first col highlighted
 set formatoptions+=t
 
 set esckeys
