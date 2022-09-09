@@ -10,8 +10,9 @@ homedir=$HOME
 
 
 #extglob for negative pattern matching, dotglob to match dotfiles
-shopt -s extglob dotglob
+shopt -s extglob
 #(a)rchive, (v)erbose, (s)ymlink, (f)orce
 cp -avsf $dotdir/.!(@(|.)|git|gitignore|*swp|git-completion) $homedir 
 # (all dotfiles except not ., .., .git, .gitignore, etc)
-	
+shopt -u extglob
+
