@@ -19,3 +19,5 @@ then
     source <(kubectl completion bash)
     exit
 fi
+
+source .git-completion.bash
