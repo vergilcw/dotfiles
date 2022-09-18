@@ -1,3 +1,4 @@
 *.swp
 gitconfig
-git-completion*
+.git-completion*
+
