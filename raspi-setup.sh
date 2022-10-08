@@ -23,6 +23,7 @@ apt install vlock # for locking terminal
 
 git config --global user.name "Vergil Weatherford"
 git config --global user.email "vergilcw@gmail.com"
+git config --global pull.ff only
 
 git clone https://github.com/vergilcw/epson-es300w-autoscan
 
