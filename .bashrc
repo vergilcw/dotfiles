@@ -14,10 +14,10 @@ export PROJECT_HOME=$HOME/Devel
 #   source "/google/devshell/bashrc.google"
 # fi
 
-if command -v kubectl &> /dev/null
-then
-    source <(kubectl completion bash)
-    exit
-fi
+# if command -v kubectl &> /dev/null
+# then
+#     source <(kubectl completion bash)
+#     exit
+# fi
 
 source ~/.git-completion.bash
