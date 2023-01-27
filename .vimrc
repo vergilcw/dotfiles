@@ -77,3 +77,4 @@ nmap <c-_> <Plug>SlimeLineSend
 nmap <c-c>v     <Plug>SlimeConfig
 
 "colorscheme base16-default-dark
+
