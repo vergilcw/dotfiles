@@ -25,3 +25,6 @@ source ~/.git-completion.bash
 export GPG_TTY=$(tty)
 LANG="en_US.UTF-8"
 export LANG
+
+PAGER=less
+export PAGER
