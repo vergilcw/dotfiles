@@ -26,3 +26,6 @@ export GPG_TTY=$(tty)
 LANG="en_US.UTF-8"
 #[Date Time TZ] user@host:workdir$
 PS1="[\D{%Y-%m-%d %H:%M:%S %Z}] \[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ "
+
+PAGER=less
+export PAGER
