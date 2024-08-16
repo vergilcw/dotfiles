@@ -69,11 +69,13 @@ autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '' | exe
 
 "settings for REPL to send-code via vim-slime
 let g:slime_target = "tmux"
-let g:slime_default_config = {"socket_name": "default", "target_pane": "{top-right}"}
+let g:slime_default_config = {"socket_name": "default", "target_pane": "{last}"}
+
 "Map hotkey to run code as Ctrl-/ (synonym for Ctrl-_)
-xmap <c-_> <Plug>SlimeRegionSend 
 let g:slime_dont_ask_default = 1
-nmap <c-_> <Plug>SlimeLineSend
+let g:slime_paste_file = "$HOME/.slime_paste"
+nmap <c-S-_> <Plug>SlimeLineSend
+nmap <c-S-_> <Plug>SlimeLineSend
 nmap <c-c>v     <Plug>SlimeConfig
 
 " Cursor in terminal
