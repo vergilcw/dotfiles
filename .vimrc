@@ -55,12 +55,13 @@ if empty(glob('~/.vim/autoload/plug.vim'))
 
 "load plugins
 call plug#begin()
+Plug 'github/copilot.vim'
 Plug 'sheerun/vim-polyglot'
 Plug 'christoomey/vim-tmux-navigator'   "better tmux bindings
 Plug 'RyanMillerC/better-vim-tmux-resizer' "improved resizing vs. vim-tmux-resizer
 Plug 'jpalardy/vim-slime'               "connect to a REPL
 Plug 'chriskempson/base16-vim'          "16-bit vim colors (for compatibility)
-Plug 'ojroques/vim-oscyank'             "copy to system clipboard"
+Plug 'ojroques/vim-oscyank'             "copy to system clipboard
 call plug#end()
 
 "for vim-oscyank plugin, always yank to chromeos system clipboard
