@@ -14,7 +14,7 @@ jobs:
       - name: repo-sync
         uses: repo-sync/github-sync@v2
         with:
-          source_repo: 'org/repo'
+          source_repo: 'vergilcw/dotfiles'
           source_branch: 'main'
           destination_branch: 'main'
           github_token: ${{ secrets.PAT }}
