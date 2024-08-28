@@ -1,4 +1,4 @@
-run-name: 'Repository Sync'
+name: 'Repository Sync'
 on:
   schedule:
     - cron: '*/15 * * * *'
