@@ -1,0 +1,3 @@
+#enable pressing up anywhere in the line to transit history on unique text to right of cursor
+"\e[A": history-search-backward
+"\e[B": history-search-forward
