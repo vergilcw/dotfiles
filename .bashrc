@@ -30,6 +30,8 @@ if [ -f ~/.git-prompt.sh ]; then
     exit
 fi
 
+alias tmux="tmux -2"
+
 export GPG_TTY=$(tty)
 LANG="en_US.UTF-8"
 #[Date Time TZ] user@host:workdir$
