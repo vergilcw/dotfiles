@@ -19,3 +19,10 @@ cp -avsb $dotdir/.!(@(|.)|git|gitignore|*swp|git-completion) $homedir
 # (all dotfiles except not ., .., .git, .gitignore, etc)
 shopt -u extglob
 
+
+
+
+if gh extension list | grep -q "github/gh-copilot" && ! grep -q "gh copilot" ~/.bashrc; then echo 'eval "$(gh copilot alias -- bash)"' >> ~/.bashrc; fi
+
+
+

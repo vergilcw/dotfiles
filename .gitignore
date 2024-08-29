@@ -1,6 +1,5 @@
 *.swp
 gitconfig
-# bootstrap.sh auto-downloads .git-completion
-.git-completion*
-git-prompt.sh
+.git-prompt.sh
+.git-completion.bash
 
