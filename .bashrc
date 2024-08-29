@@ -1,4 +1,9 @@
+#enable vi mode in command editor:
 set -o vi
+#enable pressing up anywhere in the line to transit history on unique text to right of cursor
+"\e[A": history-search-backward
+"\e[B": history-search-forward
+
 #export TERM=xterm-256color
 
 export WORKON_HOME=$HOME/.virtualenvs
