@@ -60,12 +60,13 @@ Plug 'sheerun/vim-polyglot'
 Plug 'christoomey/vim-tmux-navigator'   "better tmux bindings
 Plug 'RyanMillerC/better-vim-tmux-resizer' "improved resizing vs. vim-tmux-resizer
 Plug 'jpalardy/vim-slime'               "connect to a REPL
-Plug 'chriskempson/base16-vim'          "16-bit vim colors (for compatibility)
 Plug 'ojroques/vim-oscyank'             "copy to system clipboard
+Plug 'chriskempson/base16-vim'          "16-bit vim colors (for compatibility)
 call plug#end()
+"Plug 'altercation/vim-colors-solarized' "solarized colorscheme
 
 "for vim-oscyank plugin, always yank to chromeos system clipboard
-autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '' | execute 'OSCYankReg "' | endif
+"autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '' | execute 'OSCYankReg "' | endif
 
 
 "settings for REPL to send-code via vim-slime
@@ -96,5 +97,7 @@ if &term =~ '^xterm'
   let &t_SI .= "\<Esc>[6 q"
 endif
 
-"colorscheme base16-default-dark
-
+syntax enable
+colorscheme base16-default-dark
+"colorscheme solarized
+set background=dark
