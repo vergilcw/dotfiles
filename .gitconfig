@@ -1,0 +1,27 @@
+[user]
+  name = "Vergil Weatherford"
+  email = "vergil.weatherford@guidehouse.com"
+[pull]
+  ff = only
+[push]
+  autoSetupRemote = true
+[diff]  
+  colorMoved default 
+  algorithm histogram
+  
+[branch]
+  sort -committerdate
+
+# [merge]
+#  conflictstyle zdiff3
+[rebase]
+  autoStash = true
+
+# include personal email if vergilcw is in the path
+[includeIf "gitdir:**/vergilcw/**"]
+	path = ~/.dotfiles/.gitconfig_vergilcw
+
+# or in the origin url
+[includeIf "hasconfig:remote.*.url:https://github.com/vergilcw/**"]
+	path = ~/.dotfiles/.gitconfig_vergilcw
+
