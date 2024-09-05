@@ -61,9 +61,9 @@ Plug 'christoomey/vim-tmux-navigator'   "better tmux bindings
 Plug 'RyanMillerC/better-vim-tmux-resizer' "improved resizing vs. vim-tmux-resizer
 Plug 'jpalardy/vim-slime'               "connect to a REPL
 Plug 'ojroques/vim-oscyank'             "copy to system clipboard
-Plug 'chriskempson/base16-vim'          "16-bit vim colors (for compatibility)
 call plug#end()
 "Plug 'altercation/vim-colors-solarized' "solarized colorscheme
+"Plug 'chriskempson/base16-vim'          "16-bit vim colors (for compatibility)
 
 "for vim-oscyank plugin, always yank to chromeos system clipboard
 "autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '' | execute 'OSCYankReg "' | endif
@@ -73,12 +73,11 @@ call plug#end()
 let g:slime_target = "tmux"
 let g:slime_default_config = {"socket_name": "default", "target_pane": "{last}"}
 
-"Map hotkey to run code as Ctrl-/ (synonym for Ctrl-_)
+"Map hotkey to run code as Ctrl-Shift-/ (synonym for Ctrl-S-_)
 let g:slime_dont_ask_default = 1
 let g:slime_paste_file = "$HOME/.slime_paste"
 nmap <c-S-_> <Plug>SlimeLineSend
-nmap <c-S-_> <Plug>SlimeLineSend
-nmap <c-c>v     <Plug>SlimeConfig
+nmap <c-c>v  <Plug>SlimeConfig
 
 " Cursor in terminal
 " https://vim.fandom.com/wiki/Configuring_the_cursor
@@ -98,6 +97,7 @@ if &term =~ '^xterm'
 endif
 
 syntax enable
-colorscheme base16-default-dark
+"colorscheme base16-mocha
+"colorscheme base16-default-dark
 "colorscheme solarized
 set background=dark

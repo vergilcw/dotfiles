@@ -1,19 +1,23 @@
 [user]
   name = "Vergil Weatherford"
   email = "vergil.weatherford@guidehouse.com"
+
 [pull]
   ff = only
+
 [push]
   autoSetupRemote = true
+
 [diff]  
-  colorMoved default 
-  algorithm histogram
+  colorMoved = "default"
+  algorithm = "histogram"
   
 [branch]
-  sort -committerdate
+  sort = "-committerdate"
 
 # [merge]
 #  conflictstyle zdiff3
+
 [rebase]
   autoStash = true
 
