@@ -16,19 +16,41 @@ set -o vi
 #   source "/google/devshell/bashrc.google"
 # fi
 
+#check whether gh exists and gh copilot is installed, if so then add ghce and ghcs aliases
+if command -v gh &> /dev/null && gh extension list | grep -q "github/gh-copilot"; then 
+    echo "gh copilot aliases ghce and ghcs available"
+    alias '??'='gh copilot suggest -t shell'
+    alias 'git?'='gh copilot suggest -t git'
+    alias 'explain'='gh copilot explain'
+    alias 'gh?'='gh copilot suggest -t gh'
+    eval "$(gh copilot alias -- bash)" 
+fi
+
+#if run.sh has been run, then git completions and custom shell prompt scripts should be avalailable
+if [ -f ~/.git-completion.bash ]; then
+    echo "completions: git"
+    source ~/.git-completion.bash
+fi
+
+if [ -f ~/.git-prompt.sh ]; then
+    echo "git-prompt"
+    source ~/.git-prompt.sh
+fi
+
+# 1password completions
+if command -v op &> /dev/null; then 
+    echo "completions: 1password (op)"
+    source <(op completion bash)
+fi
+
+# kubectl completions
 if command -v kubectl &> /dev/null
 then
+    echo "completions: kubectl"
     source <(kubectl completion bash)
     exit
 fi
 
-# if file exists, source it
-if [ -f ~/.git-completion.bash ]; then
-    source ~/.git-completion.bash
-fi
-if [ -f ~/.git-prompt.sh ]; then
-    source ~/.git-prompt.sh
-fi
 
 alias tmux="tmux -2"
 
@@ -54,9 +76,6 @@ export GIT_PS1_SHOWDIRTYSTATE=true
 #PROMPT_COMMAND='__git_ps1 "$green\u$reset@$blue\h$reset:\w" "\$ "'
 #export PROMPT_COMMAND='__git_ps1 "\001\033[01;32m\002\u\033[00m\]@\033[01;34m\]\h\033[00m\]:\w" "\$ "'
 
-# Add Git Auto-Completion 
-source .git-prompt.sh
-source .git-completion.bash
 
 ## experiment for clean prompt definition:
 #green="\001$(tput setaf 34)\002"
@@ -69,16 +88,8 @@ source .git-completion.bash
 #PS1+="$blue\w\$$reset " # workingdir$
 #export PS1
 #export PROMPT_COMMAND
-unset green blue dim reset
+#unset green blue dim reset
 
 PAGER=less
 export PAGER
 
-#check whether gh exists and gh copilot is installed, if so then add ghce and ghcs aliases
-if [command -v gh &> /dev/null && gh extension list | grep -q "github/gh-copilot"]; then 
-    alias '??'='gh copilot suggest -t shell'
-    alias 'git?'='gh copilot suggest -t git'
-    alias 'explain'='gh copilot explain'
-    alias 'gh?'='gh copilot suggest -t gh'
-    eval "$(gh copilot alias -- bash)"; 
-fi
