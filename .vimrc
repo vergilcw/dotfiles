@@ -53,6 +53,9 @@ if empty(glob('~/.vim/autoload/plug.vim'))
     autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
     endif
 
+    "allow us to override vim-slime bindings below (must be before plug#begin)
+let g:slime_no_mappings = 1
+
 "load plugins
 call plug#begin()
 Plug 'github/copilot.vim'
@@ -76,8 +79,19 @@ let g:slime_default_config = {"socket_name": "default", "target_pane": "{last}"}
 "Map hotkey to run code as Ctrl-Shift-/ (synonym for Ctrl-S-_)
 let g:slime_dont_ask_default = 1
 let g:slime_paste_file = "$HOME/.slime_paste"
+"nmap <c-S-_> <Plug>SlimeLineSend
+"nmap <c-c>v  <Plug>SlimeConfig
+
+"send visual selection
+xmap <c-S-_> <Plug>SlimeRegionSend
+
+"send based on motion or text object
+"nmap <leader>s <Plug>SlimeMotionSend
+
+"send line
 nmap <c-S-_> <Plug>SlimeLineSend
-nmap <c-c>v  <Plug>SlimeConfig
+
+
 
 " Cursor in terminal
 " https://vim.fandom.com/wiki/Configuring_the_cursor
