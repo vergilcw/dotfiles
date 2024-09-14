@@ -33,7 +33,7 @@ if [ -f ~/.git-completion.bash ]; then
 fi
 
 if [ -f ~/.git-prompt.sh ]; then
-    echo "git-prompt"
+    echo "completions: git-prompt"
     source ~/.git-prompt.sh
 fi
 

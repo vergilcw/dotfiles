@@ -19,11 +19,11 @@
 
 # include personal email if vergilcw is in the path
 [includeIf "gitdir:**/vergilcw/**"]
-	path = ~/.dotfiles/.gitconfig_vergilcw
+	path = ~/.gitconfig_vergilcw
 
 # or in the origin url
 [includeIf "hasconfig:remote.*.url:https://github.com/vergilcw/**"]
-	path = ~/.dotfiles/.gitconfig_vergilcw
+	path = ~/.gitconfig_vergilcw
 
 [credential "https://github.com"]
 	helper = 
