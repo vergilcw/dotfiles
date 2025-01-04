@@ -27,7 +27,9 @@
 
 [credential "https://github.com"]
 	helper = !/usr/bin/gh auth git-credential
+  #nixos gh install location:
 	helper = !/run/current-system/sw/bin/gh auth git-credential
 [credential "https://gist.github.com"]
 	helper = !/usr/bin/gh auth git-credential
-	helper = !/run/current-system/sw/bin/gh auth git-credential
+  #nixos gh install location:
+  helper = !/run/current-system/sw/bin/gh auth git-credential
