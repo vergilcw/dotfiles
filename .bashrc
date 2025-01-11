@@ -1,6 +1,9 @@
 #enable vi mode in command editor:
 set -o vi
 
+export EDITOR=vi
+export VISUAL=vi
+
 #export TERM=xterm-256color
 
 #export WORKON_HOME=$HOME/.virtualenvs
