@@ -17,13 +17,15 @@ set tabstop=2 shiftwidth=2 expandtab "tabs as spaces
 nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
 nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
 
-"Make Ctrl-Shift-j/k move lines up or down.
-nnoremap <C-j> :m .+1<CR>==
-nnoremap <C-k> :m .-2<CR>==
-inoremap <C-j> <Esc>:m .+1<CR>==gi
-inoremap <C-k> <Esc>:m .-2<CR>==gi
-vnoremap <C-j> :m '>+1<CR>gv=gv
-vnoremap <C-k> :m '<-2<CR>gv=gv
+"Make Ctrl-Shift-j/k move lines up or down. (Not currently working, it only
+"switches tmux panes
+
+"nnoremap <C-S-j> :m .+1<CR>==
+"nnoremap <C-S-k> :m .-2<CR>==
+"inoremap <C-S-j> <Esc>:m .+1<CR>==gi
+"inoremap <C-S-k> <Esc>:m .-2<CR>==gi
+"vnoremap <C-S-j> :m '>+1<CR>gv=gv
+"vnoremap <C-S-k> :m '<-2<CR>gv=gv
 
 augroup numbertoggle "turn off relative line numbers in insert mode
   autocmd!
@@ -53,43 +55,21 @@ if empty(glob('~/.vim/autoload/plug.vim'))
     autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
     endif
 
-    "allow us to override vim-slime bindings below (must be before plug#begin)
-let g:slime_no_mappings = 1
-
 "load plugins
 call plug#begin()
 Plug 'github/copilot.vim'
 Plug 'sheerun/vim-polyglot'
 Plug 'christoomey/vim-tmux-navigator'   "better tmux bindings
 Plug 'RyanMillerC/better-vim-tmux-resizer' "improved resizing vs. vim-tmux-resizer
-Plug 'jpalardy/vim-slime'               "connect to a REPL
 Plug 'ojroques/vim-oscyank'             "copy to system clipboard
+Plug 'zweifisch/replit.vim' "send lines to other pane (simpler than vim-slime)
 call plug#end()
+"Plug 'jpalardy/vim-slime'               "connect to a REPL
 "Plug 'altercation/vim-colors-solarized' "solarized colorscheme
 "Plug 'chriskempson/base16-vim'          "16-bit vim colors (for compatibility)
 
 "for vim-oscyank plugin, always yank to chromeos system clipboard
 "autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '' | execute 'OSCYankReg "' | endif
-
-
-"settings for REPL to send-code via vim-slime
-let g:slime_target = "tmux"
-let g:slime_default_config = {"socket_name": "default", "target_pane": "{last}"}
-
-"Map hotkey to run code as Ctrl-Shift-/ (synonym for Ctrl-S-_)
-let g:slime_dont_ask_default = 1
-let g:slime_paste_file = "$HOME/.slime_paste"
-"nmap <c-S-_> <Plug>SlimeLineSend
-"nmap <c-c>v  <Plug>SlimeConfig
-
-"send visual selection
-xmap <c-S-_> <Plug>SlimeRegionSend
-
-"send based on motion or text object
-"nmap <leader>s <Plug>SlimeMotionSend
-
-"send line
-nmap <c-S-_> <Plug>SlimeLineSend
 
 
 

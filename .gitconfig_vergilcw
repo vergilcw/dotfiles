@@ -1,12 +1,10 @@
 [user]
   name = Vergil Weatherford
   email = vergilcw@gmail.com
-
-[gpg]
-	format = ssh
-[gpg "ssh"]
-	program = /opt/1Password/op-ssh-sign
-[commit]
-	gpgsign = true
-[user]
-	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBxOf4VxRCilicC0JrTo7JDS28Avqk2m6NypX84Q3Xm9
+# 	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBxOf4VxRCilicC0JrTo7JDS28Avqk2m6NypX84Q3Xm9
+# 
+# [gpg]
+# 	format = ssh
+# 
+# [commit]
+# 	gpgsign = true
