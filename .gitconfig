@@ -28,13 +28,8 @@
 [includeIf "hasconfig:remote.*.url:https://github.com/vergilcw/**"]
 	path = ~/.gitconfig_vergilcw
 
-# TODO: figure out how to set credential helper to gh for both nixos and
 # standard linux binary locations
 [credential "https://github.com"]
-	helper = !/usr/bin/gh auth git-credential
-  #nixos gh install location:
-	helper = !/run/current-system/sw/bin/gh auth git-credential
+	helper = !gh auth git-credential
 [credential "https://gist.github.com"]
-	helper = !/usr/bin/gh auth git-credential
-  #nixos gh install location:
-  helper = !/run/current-system/sw/bin/gh auth git-credential
+	helper = !gh auth git-credential
