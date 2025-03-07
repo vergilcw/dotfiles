@@ -69,9 +69,9 @@ LANG="en_US.UTF-8"
 
 
 # git-prompt.sh settings
-export GIT_PS1_SHOWUNTRACKEDFILES=true
-export GIT_PS1_SHOWCOLORHINTS=true
-export GIT_PS1_SHOWDIRTYSTATE=true
+# export GIT_PS1_SHOWUNTRACKEDFILES=true
+# export GIT_PS1_SHOWCOLORHINTS=true
+# export GIT_PS1_SHOWDIRTYSTATE=true
 # will show username, at-sign, host, colon,
 # current directory, and git status followed by dollar
 
