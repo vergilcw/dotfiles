@@ -4,6 +4,9 @@
 [pull]
   ff = only
 
+init.defaultBranch main
+push.autoSetupRemote true
+
 [push]
   autoSetupRemote = true
 
@@ -15,7 +18,8 @@
   sort = "-committerdate"
 
 # [merge]
-#  conflictstyle zdiff3
+#  conflictstyle = "zdiff3"
+#  tool = "meld"
 
 [rebase]
   autoStash = true
