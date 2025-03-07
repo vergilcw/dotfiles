@@ -30,29 +30,29 @@ if command -v gh &> /dev/null && gh extension list | grep -q "github/gh-copilot"
 fi
 
 #if run.sh has been run, then git completions and custom shell prompt scripts should be avalailable
-if [ -f ~/.git-completion.bash ]; then
-    echo "completions: git"
-    source ~/.git-completion.bash
-fi
-
-if [ -f ~/.git-prompt.sh ]; then
-    echo "completions: git-prompt"
-    source ~/.git-prompt.sh
-fi
-
-# 1password completions
-if command -v op &> /dev/null; then 
-    echo "completions: 1password (op)"
-    source <(op completion bash)
-fi
-
-# kubectl completions
-if command -v kubectl &> /dev/null
-then
-    echo "completions: kubectl"
-    source <(kubectl completion bash)
-    exit
-fi
+# if [ -f ~/.git-completion.bash ]; then
+#     echo "completions: git"
+#     source ~/.git-completion.bash
+# fi
+# 
+# if [ -f ~/.git-prompt.sh ]; then
+#     echo "completions: git-prompt"
+#     source ~/.git-prompt.sh
+# fi
+# 
+# # 1password completions
+# if command -v op &> /dev/null; then 
+#     echo "completions: 1password (op)"
+#     source <(op completion bash)
+# fi
+# 
+# # kubectl completions
+# if command -v kubectl &> /dev/null
+# then
+#     echo "completions: kubectl"
+#     source <(kubectl completion bash)
+#     exit
+# fi
 
 
 alias tmux="tmux -2"

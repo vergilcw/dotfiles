@@ -37,10 +37,10 @@ curl "https://raw.githubusercontent.com/git/git/master/contrib/completion/git-pr
 # # current directory, and git status followed by dollar
 # export PROMPT_COMMAND='__git_ps1 "\u@\h:\w" "\\\$ "'
 
-
+echo "made it to 1"
 dotdir="$(cd "$(dirname "$1")"; pwd)$(basename "$1")"
 homedir=$HOME
-
+echo "made it to 2"
 
 #extglob for negative pattern matching, dotglob to match dotfiles
 shopt -s extglob
