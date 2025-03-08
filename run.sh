@@ -1,5 +1,13 @@
 #!/usr/bin/env bash
 
+# check whether running on a nixos system
+if [ -f /etc/nixos/configuration.nix ]
+then
+    echo "NixOS detected. Skipping Homebrew installation..."
+else
+    echo "Not NixOS. Proceeding with Homebrew installation..."
+
+
 # # Install Homebrew
 # Check whether homebrew is installed:
 if ! command -v brew &> /dev/null
@@ -13,7 +21,7 @@ fi
 brew update
 brew upgrade
 # # Install package
-packages="htop git vim wget jq fish tmux"
+packages="htop git vim wget jq fish zellij ncdu"
 # loop through packages and check if they are already present. If not, install them with brew.
 for package in $packages
 do
@@ -32,10 +40,13 @@ sleep 1
 # # ...and then.
 echo "Success! Basic brew packages are installed."
 
+fi
+
+
 
 # Download Git Auto-Completion
-curl "https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash" > .git-completion.bash
-curl "https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh" > .git-prompt.sh
+# curl "https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash" > .git-completion.bash
+# curl "https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh" > .git-prompt.sh
 
 
 # # Add Git Auto-Completion to .bashrc
