@@ -1,26 +1,36 @@
 #!/usr/bin/env bash
 
 # # Install Homebrew
-# 
-# /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-# brew update
-# brew upgrade
-# 
-# brew tap homebrew/cask-versions
-# 
-# # Install packages
-# brew install --cask hpedrorodrigues/tools/dockutil # See https://github.com/kcrawford/dockutil/issues/127#issuecomment-1118733013
-# # brew install dockutil # Used to manage the dock
-# brew install htop
-# brew install git
-# brew install wget
-# brew install jq # Used for json manipulation
-# brew install fish #better shell
+# Check whether homebrew is installed:
+if ! command -v brew &> /dev/null
+then
+    echo "Homebrew is not installed. Installing Homebrew..."
+    NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+else
+    echo "Homebrew is already installed. Skipping..."
+fi 
+brew update
+brew upgrade
+# # Install package
+packages="htop git vim wget jq fish tmux"
+# loop through packages and check if they are already present. If not, install them with brew.
+for package in $packages
+do
+    if ! command -v $package &> /dev/null
+    then
+        echo "$package is not installed. Installing $package..."
+        brew install $package
+    else
+        echo "$package is already installed. Skipping..."
+    fi
+done
+
 # # Wait a bit before moving on...
-# sleep 1
+sleep 1
 # 
 # # ...and then.
-# echo "Success! Basic brew packages are installed."
+echo "Success! Basic brew packages are installed."
 
 
 # Download Git Auto-Completion
@@ -37,10 +47,8 @@ curl "https://raw.githubusercontent.com/git/git/master/contrib/completion/git-pr
 # # current directory, and git status followed by dollar
 # export PROMPT_COMMAND='__git_ps1 "\u@\h:\w" "\\\$ "'
 
-echo "made it to 1"
 dotdir="$(cd "$(dirname "$1")"; pwd)$(basename "$1")"
 homedir=$HOME
-echo "made it to 2"
 
 #extglob for negative pattern matching, dotglob to match dotfiles
 shopt -s extglob

@@ -54,8 +54,8 @@ fi
 #     exit
 # fi
 
-
-alias tmux="tmux -2"
+# enable 256 color support for tmux (turned off because it messes up package installation in in run.sh)
+# alias tmux="tmux -2"
 
 export GPG_TTY=$(tty)
 LANG="en_US.UTF-8"
