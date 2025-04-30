@@ -9,30 +9,30 @@ else
 
 
 # # Install Homebrew
-# Check whether homebrew is installed:
-if ! command -v brew &> /dev/null
-then
-    echo "Homebrew is not installed. Installing Homebrew..."
-    NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-else
-    echo "Homebrew is already installed. Skipping..."
-fi 
-brew update
-brew upgrade
+## Check whether homebrew is installed:
+#if ! command -v brew &> /dev/null
+#then
+#    echo "Homebrew is not installed. Installing Homebrew..."
+#    NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+#    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+#else
+#    echo "Homebrew is already installed. Skipping..."
+#fi 
+#brew update
+#brew upgrade
 # # Install package
-packages="htop git vim wget jq fish zellij ncdu"
-# loop through packages and check if they are already present. If not, install them with brew.
-for package in $packages
-do
-    if ! command -v $package &> /dev/null
-    then
-        echo "$package is not installed. Installing $package..."
-        brew install $package
-    else
-        echo "$package is already installed. Skipping..."
-    fi
-done
+#packages="htop git vim wget jq fish zellij ncdu"
+## loop through packages and check if they are already present. If not, install them with brew.
+#for package in $packages
+#do
+#    if ! command -v $package &> /dev/null
+#    then
+#        echo "$package is not installed. Installing $package..."
+#        brew install $package
+#    else
+#        echo "$package is already installed. Skipping..."
+#    fi
+#done
 
 # # Wait a bit before moving on...
 sleep 1
