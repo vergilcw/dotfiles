@@ -33,7 +33,7 @@ fi
 # Install Zellij (musl static build)
 if ! command -v zellij &> /dev/null; then
   echo "Zellij not found. Installing Zellij..."
-  url=$(latest_url zellij-org/zellij "zellij-x86_64-unknown-linux-musl\.tar\.gz") && curl -Lo zellij.tar.gz "$url"
+  url=$(latest_url zellij-org/zellij "zellij-x86_64-unknown-linux-musl\.tar\.gz$") && curl -Lo zellij.tar.gz "$url"
   echo "Extracting Zellij..."
   tar -xzf zellij.tar.gz -C "$BIN"
   chmod +x "$BIN/zellij"
@@ -46,7 +46,7 @@ fi
 # Install Neovim (AppImage)
 if ! command -v nvim &> /dev/null; then
   echo "Neovim not found. Installing Neovim..."
-  url=$(latest_url neovim/neovim "nvim-linux-x86_64.appimage") && curl -Lo nvim.appimage "$url"
+  url=$(latest_url neovim/neovim 'nvim-linux-x86_64.appimage"') && curl -Lo nvim.appimage "$url"
   chmod +x nvim.appimage
   echo "Extracting Neovim AppImage..."
   ./nvim.appimage --appimage-extract
