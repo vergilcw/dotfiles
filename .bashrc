@@ -5,11 +5,13 @@ export EDITOR=vi
 export VISUAL=vi
 export PAGER=less
 
+
 export GPG_TTY=$(tty)
 LANG="en_US.UTF-8"
 
 # dotfiles/run.sh uses ~/.local/bin as the default bin directory, so make sure it's in
 # PATH:
+BIN="$HOME/.local/bin"
 if [[ ":$PATH:" != *":$BIN:"* ]]; then
   echo "$BIN not found in PATH. Adding it..."
   export PATH="$BIN:$PATH"  
