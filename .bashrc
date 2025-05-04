@@ -12,7 +12,7 @@ LANG="en_US.UTF-8"
 # PATH:
 if [[ ":$PATH:" != *":$BIN:"* ]]; then
   echo "$BIN not found in PATH. Adding it..."
-  export PATH=\"$BIN:\$PATH\"  
+  export PATH="$BIN:$PATH"  
   echo "export PATH=\"$BIN:\$PATH\"" >> "$HOME/.bashrc"
   echo "$BIN has been added to PATH."
 else
