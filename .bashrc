@@ -3,21 +3,22 @@ set -o vi
 
 export EDITOR=vi
 export VISUAL=vi
+export PAGER=less
 
-#export TERM=xterm-256color
+export GPG_TTY=$(tty)
+LANG="en_US.UTF-8"
 
-#export WORKON_HOME=$HOME/.virtualenvs
-#export PROJECT_HOME=$HOME/Devel
-#source /usr/local/bin/virtualenvwrapper.sh
+# dotfiles/run.sh uses ~/.local/bin as the default bin directory, so make sure it's in
+# PATH:
+if [[ ":$PATH:" != *":$BIN:"* ]]; then
+  echo "$BIN not found in PATH. Adding it..."
+  echo "export PATH=\"$BIN:\$PATH\"" >> "$HOME/.bashrc"
+  source "$HOME/.bashrc"
+  echo "$BIN has been added to PATH."
+else
+  echo "$BIN is already in PATH."
+fi
 
-# # If not running interactively, return
-# case $- in
-#     *i*) ;;
-#       *) return;;
-# esac
-# if [ -f "/google/devshell/bashrc.google" ]; then
-#   source "/google/devshell/bashrc.google"
-# fi
 
 #check whether gh exists and gh copilot is installed, if so then add ghce and ghcs aliases
 if command -v gh &> /dev/null && gh extension list | grep -q "github/gh-copilot"; then 
@@ -57,8 +58,6 @@ fi
 # enable 256 color support for tmux (turned off because it messes up package installation in in run.sh)
 # alias tmux="tmux -2"
 
-export GPG_TTY=$(tty)
-LANG="en_US.UTF-8"
 
 
 #prompt color
@@ -93,6 +92,4 @@ LANG="en_US.UTF-8"
 #export PROMPT_COMMAND
 #unset green blue dim reset
 
-PAGER=less
-export PAGER
 

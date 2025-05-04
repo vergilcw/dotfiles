@@ -1,47 +1,66 @@
 #!/usr/bin/env bash
+#!/bin/bash
 
-# check whether running on a nixos system
-if [ -f /etc/nixos/configuration.nix ]
-then
-    echo "NixOS detected. Skipping Homebrew installation..."
-else
-    echo "Not NixOS. Proceeding with Homebrew installation..."
+BIN="$HOME/.local/bin"
+mkdir -p "$BIN"
 
-
-# # Install Homebrew
-## Check whether homebrew is installed:
-#if ! command -v brew &> /dev/null
-#then
-#    echo "Homebrew is not installed. Installing Homebrew..."
-#    NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-#    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-#else
-#    echo "Homebrew is already installed. Skipping..."
-#fi 
-#brew update
-#brew upgrade
-# # Install package
-#packages="htop git vim wget jq fish zellij ncdu"
-## loop through packages and check if they are already present. If not, install them with brew.
-#for package in $packages
-#do
-#    if ! command -v $package &> /dev/null
-#    then
-#        echo "$package is not installed. Installing $package..."
-#        brew install $package
-#    else
-#        echo "$package is already installed. Skipping..."
-#    fi
-#done
-
-# # Wait a bit before moving on...
-sleep 1
-# 
-# # ...and then.
-echo "Success! Basic brew packages are installed."
-
+# Skip installation on NixOS
+if [ -f /etc/os-release ] && grep -q 'ID=nixos' /etc/os-release; then
+  echo "NixOS detected. Skipping binary downloads (assume nix will be used)."
+  exit 0
 fi
 
+# Function to get the latest release URL from GitHub
+latest_url() {
+  curl -s "https://api.github.com/repos/$1/releases/latest" |
+    grep "browser_download_url" |
+    grep -i "$2" |
+    cut -d '"' -f 4
+}
+
+# Install Fish (static build)
+if ! command -v fish &> /dev/null; then
+  echo "Fish not found. Installing Fish shell..."
+  url=$(latest_url fish-shell/fish-shell "fish-static-amd64.*\.tar\.xz") && curl -Lo fish.tar.xz "$url"
+  echo "Extracting Fish shell..."
+  tar -xJf fish.tar.xz -C "$BIN" --strip-components=1 fish*/fish
+  rm fish.tar.xz
+  echo "Fish shell installed successfully!"
+else
+  echo "Fish shell is already installed."
+fi
+
+# Install Zellij (musl static build)
+if ! command -v zellij &> /dev/null; then
+  echo "Zellij not found. Installing Zellij..."
+  url=$(latest_url zellij-org/zellij "zellij-x86_64-unknown-linux-musl\.tar\.gz") && curl -Lo zellij.tar.gz "$url"
+  echo "Extracting Zellij..."
+  tar -xzf zellij.tar.gz -C "$BIN"
+  chmod +x "$BIN/zellij"
+  rm zellij.tar.gz
+  echo "Zellij installed successfully!"
+else
+  echo "Zellij is already installed."
+fi
+
+# Install Neovim (AppImage)
+if ! command -v nvim &> /dev/null; then
+  echo "Neovim not found. Installing Neovim..."
+  url=$(latest_url neovim/neovim "nvim-linux-x86_64.appimage") && curl -Lo nvim.appimage "$url"
+  chmod +x nvim.appimage
+  echo "Extracting Neovim AppImage..."
+  ./nvim.appimage --appimage-extract
+  mv squashfs-root/usr/bin/nvim "$BIN/nvim"
+  rm -rf squashfs-root nvim.appimage
+  echo "Neovim installed successfully!"
+else
+  echo "Neovim is already installed."
+fi
+
+# Ensure all binaries in $BIN are executable
+echo "Making sure all binaries in $BIN are executable..."
+chmod +x "$BIN"/*
+echo "All binaries are now executable!"
 
 
 # Download Git Auto-Completion
