@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
-#!/bin/bash
 
 BIN="$HOME/.local/bin"
 mkdir -p "$BIN"
+
+# Detect platform/arch
+OS="$(uname -s)"
+ARCH="$(uname -m)"
 
 # Skip installation on NixOS
 if [ -f /etc/os-release ] && grep -q 'ID=nixos' /etc/os-release; then
@@ -18,22 +21,63 @@ latest_url() {
     cut -d '"' -f 4
 }
 
-# Install Fish (static build)
+
+
+case "$OS" in
+  Linux)
+    if [[ "$ARCH" == "x86_64" ]]; then
+      FISH_PATTERN="fish-static-amd64.*\.tar\.xz"
+      ZELLIJ_PATTERN="zellij-x86_64-unknown-linux-musl\.tar\.gz$"
+      NVIM_PATTERN="nvim-linux-x86_64.appimage"
+    elif [[ "$ARCH" == "aarch64" || "$ARCH" == "arm64" ]]; then
+      FISH_PATTERN="fish-static-aarch64.*\.tar\.xz"
+      ZELLIJ_PATTERN="zellij-aarch64-unknown-linux-musl\.tar\.gz$"
+      NVIM_PATTERN="nvim-linux-arm64.appimage"
+    else
+      echo "Unsupported Linux architecture: $ARCH"
+      exit 1
+    fi
+    ;;
+  Darwin)
+    if [[ "$ARCH" == "x86_64" ]]; then
+      FISH_PATTERN="fish-.*\.app\.zip"
+      ZELLIJ_PATTERN="zellij-x86_64-apple-darwin\.tar\.gz$"
+      NVIM_PATTERN="nvim-macos-x86_64.tar.gz"
+    elif [[ "$ARCH" == "arm64" ]]; then
+      FISH_PATTERN="fish-.*\.app\.zip"
+      ZELLIJ_PATTERN="zellij-aarch64-apple-darwin\.tar\.gz$"
+      NVIM_PATTERN="nvim-macos-arm64.tar.gz"
+    else
+      echo "Unsupported macOS architecture: $ARCH"
+      exit 1
+    fi
+    ;;
+  *)
+    echo "Unsupported OS: $OS"
+    exit 1
+    ;;
+esac
+
+# Install Fish
 if ! command -v fish &> /dev/null; then
   echo "Fish not found. Installing Fish shell..."
-  url=$(latest_url fish-shell/fish-shell "fish-static-amd64.*\.tar\.xz") && curl -Lo fish.tar.xz "$url"
+  url=$(latest_url fish-shell/fish-shell "$FISH_PATTERN") && curl -Lo fish.tar.xz "$url"
   echo "Extracting Fish shell..."
-  tar -xJf fish.tar.xz -C "$BIN" --strip-components=1 fish*/fish
+  if [[ "$OS" == "Darwin" ]]; then
+    unzip fish.tar.xz -d "$BIN"
+  else
+    tar -xJf fish.tar.xz -C "$BIN" --strip-components=1 fish*/fish
+  fi
   rm fish.tar.xz
   echo "Fish shell installed successfully!"
 else
   echo "Fish shell is already installed."
 fi
 
-# Install Zellij (musl static build)
+# Install Zellij
 if ! command -v zellij &> /dev/null; then
   echo "Zellij not found. Installing Zellij..."
-  url=$(latest_url zellij-org/zellij "zellij-x86_64-unknown-linux-musl\.tar\.gz$") && curl -Lo zellij.tar.gz "$url"
+  url=$(latest_url zellij-org/zellij "$ZELLIJ_PATTERN") && curl -Lo zellij.tar.gz "$url"
   echo "Extracting Zellij..."
   tar -xzf zellij.tar.gz -C "$BIN"
   chmod +x "$BIN/zellij"
@@ -43,19 +87,27 @@ else
   echo "Zellij is already installed."
 fi
 
-# Install Neovim (AppImage)
+# Install Neovim
 if ! command -v nvim &> /dev/null; then
   echo "Neovim not found. Installing Neovim..."
-  url=$(latest_url neovim/neovim 'nvim-linux-x86_64.appimage"') && curl -Lo nvim.appimage "$url"
-  chmod +x nvim.appimage
-  echo "Extracting Neovim AppImage..."
-  ./nvim.appimage --appimage-extract
-  mv squashfs-root/usr/bin/nvim "$BIN/nvim"
-  rm -rf squashfs-root nvim.appimage
+  if [[ "$OS" == "Linux" ]]; then
+    url=$(latest_url neovim/neovim "$NVIM_PATTERN") && curl -Lo nvim.appimage "$url"
+    chmod +x nvim.appimage
+    echo "Extracting Neovim AppImage..."
+    ./nvim.appimage --appimage-extract
+    mv squashfs-root/usr/bin/nvim "$BIN/nvim"
+    rm -rf squashfs-root nvim.appimage
+  elif [[ "$OS" == "Darwin" ]]; then
+    url=$(latest_url neovim/neovim "$NVIM_PATTERN") && curl -Lo nvim-macos.tar.gz "$url"
+    tar -xzf nvim-macos.tar.gz
+    mv nvim-osx64/bin/nvim "$BIN/nvim" 2>/dev/null || mv nvim-macos*/bin/nvim "$BIN/nvim"
+    rm -rf nvim-macos.tar.gz nvim-osx64 nvim-macos*
+  fi
   echo "Neovim installed successfully!"
 else
   echo "Neovim is already installed."
 fi
+
 
 # Ensure all binaries in $BIN are executable
 echo "Making sure all binaries in $BIN are executable..."
