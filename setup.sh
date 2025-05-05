@@ -28,11 +28,11 @@ case "$OS" in
     if [[ "$ARCH" == "x86_64" ]]; then
       FISH_PATTERN="fish-static-amd64.*\.tar\.xz"
       ZELLIJ_PATTERN="zellij-x86_64-unknown-linux-musl\.tar\.gz"
-      NVIM_PATTERN="nvim-linux-x86_64.appimage"
+      NVIM_PATTERN="nvim-linux-x86_64.appimage\"" # \" to avoid appimage.zsync
     elif [[ "$ARCH" == "aarch64" || "$ARCH" == "arm64" ]]; then
       FISH_PATTERN="fish-static-aarch64.*\.tar\.xz"
       ZELLIJ_PATTERN="zellij-aarch64-unknown-linux-musl\.tar\.gz"
-      NVIM_PATTERN="nvim-linux-arm64.appimage"
+      NVIM_PATTERN="nvim-linux-arm64.appimage\"" # $ to avoid appimage.zsync
     else
       echo "Unsupported Linux architecture: $ARCH"
       exit 1
@@ -86,6 +86,10 @@ if ! command -v nvim &> /dev/null; then
   echo "Neovim not found. Installing Neovim..."
   if [[ "$OS" == "Linux" ]]; then
     url=$(latest_url neovim/neovim "$NVIM_PATTERN") && curl -Lo nvim.appimage "$url"
+  if [[ -z "$url" ]]; then
+    echo "Could not find Zellij binary for your architecture."
+    exit 1
+  fi
     chmod +x nvim.appimage
     echo "Extracting Neovim AppImage..."
     ./nvim.appimage --appimage-extract
