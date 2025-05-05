@@ -38,46 +38,39 @@ case "$OS" in
       exit 1
     fi
     ;;
-  Darwin)
-    if [[ "$ARCH" == "x86_64" ]]; then
-      FISH_PATTERN="fish-.*\.app\.zip"
-      ZELLIJ_PATTERN="zellij-x86_64-apple-darwin\.tar\.gz$"
-      NVIM_PATTERN="nvim-macos-x86_64.tar.gz"
-    elif [[ "$ARCH" == "arm64" ]]; then
-      FISH_PATTERN="fish-.*\.app\.zip"
-      ZELLIJ_PATTERN="zellij-aarch64-apple-darwin\.tar\.gz$"
-      NVIM_PATTERN="nvim-macos-arm64.tar.gz"
-    else
-      echo "Unsupported macOS architecture: $ARCH"
-      exit 1
-    fi
-    ;;
   *)
     echo "Unsupported OS: $OS"
     exit 1
     ;;
 esac
 
-# Install Fish
+# Install Fish (static build)
 if ! command -v fish &> /dev/null; then
   echo "Fish not found. Installing Fish shell..."
-  url=$(latest_url fish-shell/fish-shell "$FISH_PATTERN") && curl -Lo fish.tar.xz "$url"
-  echo "Extracting Fish shell..."
-  if [[ "$OS" == "Darwin" ]]; then
-    unzip fish.tar.xz -d "$BIN"
-  else
-    tar -xJf fish.tar.xz -C "$BIN" --strip-components=1 fish*/fish
+  url=$(latest_url fish-shell/fish-shell "$FISH_PATTERN")
+  if [[ -z "$url" ]]; then
+    echo "Could not find Fish binary for your architecture."
+    exit 1
   fi
+  curl -Lo fish.tar.xz "$url"
+  echo "Extracting Fish shell..."
+  tar -xJf fish.tar.xz -C "$BIN"
+  chmod +x "$BIN/fish"
   rm fish.tar.xz
   echo "Fish shell installed successfully!"
 else
   echo "Fish shell is already installed."
 fi
 
-# Install Zellij
+# Install Zellij (musl static build)
 if ! command -v zellij &> /dev/null; then
   echo "Zellij not found. Installing Zellij..."
-  url=$(latest_url zellij-org/zellij "$ZELLIJ_PATTERN") && curl -Lo zellij.tar.gz "$url"
+  url=$(latest_url zellij-org/zellij "$ZELLIJ_PATTERN")
+  if [[ -z "$url" ]]; then
+    echo "Could not find Zellij binary for your architecture."
+    exit 1
+  fi
+  curl -Lo zellij.tar.gz "$url"
   echo "Extracting Zellij..."
   tar -xzf zellij.tar.gz -C "$BIN"
   chmod +x "$BIN/zellij"
@@ -86,6 +79,7 @@ if ! command -v zellij &> /dev/null; then
 else
   echo "Zellij is already installed."
 fi
+
 
 # Install Neovim
 if ! command -v nvim &> /dev/null; then
