@@ -92,7 +92,22 @@ if ! command -v nvim &> /dev/null; then
     fi
     curl -Lo nvim.appimage "$url"
     chmod +x nvim.appimage
-    mv nvim.appimage "$BIN/nvim"
+
+    # Check if FUSE is available
+    if ./nvim.appimage --appimage-version &> /dev/null; then
+      echo "FUSE is enabled. Using AppImage directly."
+      mv nvim.appimage "$BIN/nvim"
+    else
+      echo "FUSE is not enabled. Extracting AppImage..."
+      ./nvim.appimage --appimage-extract
+      if [[ -d squashfs-root ]]; then
+        mv squashfs-root/usr/bin/nvim "$BIN/nvim"
+        rm -rf squashfs-root nvim.appimage
+      else
+        echo "Failed to extract AppImage. Exiting."
+        exit 1
+      fi
+    fi
   elif [[ "$OS" == "Darwin" ]]; then
     url=$(latest_url neovim/neovim "$NVIM_PATTERN")
     if [[ -z "$url" ]]; then
