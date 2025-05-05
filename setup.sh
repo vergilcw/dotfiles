@@ -49,7 +49,7 @@ if ! command -v fish &> /dev/null; then
   echo "Fish not found. Installing Fish shell..."
   url=$(latest_url fish-shell/fish-shell "$FISH_PATTERN")
   if [[ -z "$url" ]]; then
-    echo "Could not find Fish binary for your architecture."
+    echo "Could not find Fish binary for your architecture, tried: $url"
     exit 1
   fi
   curl -Lo fish.tar.xz "$url"
@@ -67,7 +67,7 @@ if ! command -v zellij &> /dev/null; then
   echo "Zellij not found. Installing Zellij..."
   url=$(latest_url zellij-org/zellij "$ZELLIJ_PATTERN")
   if [[ -z "$url" ]]; then
-    echo "Could not find Zellij binary for your architecture."
+    echo "Could not find Zellij binary for your architecture, tried: $url"
     exit 1
   fi
   curl -Lo zellij.tar.gz "$url"
@@ -87,7 +87,7 @@ if ! command -v nvim &> /dev/null; then
   if [[ "$OS" == "Linux" ]]; then
     url=$(latest_url neovim/neovim "$NVIM_PATTERN") && curl -Lo nvim.appimage "$url"
   if [[ -z "$url" ]]; then
-    echo "Could not find Zellij binary for your architecture."
+    echo "Could not find Zellij binary for your architecture, tried $url"
     exit 1
   fi
     chmod +x nvim.appimage
