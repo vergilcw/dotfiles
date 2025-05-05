@@ -85,18 +85,21 @@ fi
 if ! command -v nvim &> /dev/null; then
   echo "Neovim not found. Installing Neovim..."
   if [[ "$OS" == "Linux" ]]; then
-    url=$(latest_url neovim/neovim "$NVIM_PATTERN") && curl -Lo nvim.appimage "$url"
-  if [[ -z "$url" ]]; then
-    echo "Could not find Zellij binary for your architecture, tried $url"
-    exit 1
-  fi
+    url=$(latest_url neovim/neovim "$NVIM_PATTERN")
+    if [[ -z "$url" ]]; then
+      echo "Could not find Neovim binary for your architecture, tried: $url"
+      exit 1
+    fi
+    curl -Lo nvim.appimage "$url"
     chmod +x nvim.appimage
-    echo "Extracting Neovim AppImage..."
-    ./nvim.appimage --appimage-extract
-    mv squashfs-root/usr/bin/nvim "$BIN/nvim"
-    rm -rf squashfs-root nvim.appimage
+    mv nvim.appimage "$BIN/nvim"
   elif [[ "$OS" == "Darwin" ]]; then
-    url=$(latest_url neovim/neovim "$NVIM_PATTERN") && curl -Lo nvim-macos.tar.gz "$url"
+    url=$(latest_url neovim/neovim "$NVIM_PATTERN")
+    if [[ -z "$url" ]]; then
+      echo "Could not find Neovim binary for your architecture, tried: $url"
+      exit 1
+    fi
+    curl -Lo nvim-macos.tar.gz "$url"
     tar -xzf nvim-macos.tar.gz
     mv nvim-osx64/bin/nvim "$BIN/nvim" 2>/dev/null || mv nvim-macos*/bin/nvim "$BIN/nvim"
     rm -rf nvim-macos.tar.gz nvim-osx64 nvim-macos*
