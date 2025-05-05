@@ -56,7 +56,16 @@ fi
 # alias tmux="tmux -2"
 
 
+# Source the default Codespaces .bashrc if it exists
+if [ -f /etc/bash.bashrc ]; then
+    source /etc/bash.bashrc
+fi
 
+# Your customizations go below
+export GIT_PS1_SHOWUNTRACKEDFILES=true
+export GIT_PS1_SHOWCOLORHINTS=true
+export GIT_PS1_SHOWDIRTYSTATE=true
+export PROMPT_COMMAND='__git_ps1 "\u@\h:\w" "\\\$ "'
 #prompt color
 
 # original:
