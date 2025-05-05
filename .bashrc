@@ -15,12 +15,7 @@ BIN="$HOME/.local/bin"
 if [[ ":$PATH:" != *":$BIN:"* ]]; then
   echo "$BIN not found in PATH. Adding it..."
   export PATH="$BIN:$PATH"  
-  echo "export PATH=\"$BIN:\$PATH\"" >> "$HOME/.bashrc"
-  echo "$BIN has been added to PATH."
-else
-  echo "$BIN is already in PATH."
 fi
-
 
 #check whether gh exists and gh copilot is installed, if so then add ghce and ghcs aliases
 if command -v gh &> /dev/null && gh extension list | grep -q "github/gh-copilot"; then 

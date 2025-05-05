@@ -27,11 +27,11 @@ case "$OS" in
   Linux)
     if [[ "$ARCH" == "x86_64" ]]; then
       FISH_PATTERN="fish-static-amd64.*\.tar\.xz"
-      ZELLIJ_PATTERN="zellij-x86_64-unknown-linux-musl\.tar\.gz$"
+      ZELLIJ_PATTERN="zellij-x86_64-unknown-linux-musl\.tar\.gz"
       NVIM_PATTERN="nvim-linux-x86_64.appimage"
     elif [[ "$ARCH" == "aarch64" || "$ARCH" == "arm64" ]]; then
       FISH_PATTERN="fish-static-aarch64.*\.tar\.xz"
-      ZELLIJ_PATTERN="zellij-aarch64-unknown-linux-musl\.tar\.gz$"
+      ZELLIJ_PATTERN="zellij-aarch64-unknown-linux-musl\.tar\.gz"
       NVIM_PATTERN="nvim-linux-arm64.appimage"
     else
       echo "Unsupported Linux architecture: $ARCH"
@@ -104,6 +104,8 @@ fi
 
 
 # Ensure all binaries in $BIN are executable
+# TODO: side effect of this is maybe it makes things executable that weren't
+# meant to be?
 echo "Making sure all binaries in $BIN are executable..."
 chmod +x "$BIN"/*
 echo "All binaries are now executable!"
