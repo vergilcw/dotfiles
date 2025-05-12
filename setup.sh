@@ -147,7 +147,7 @@ echo "All binaries are now executable!"
 # # current directory, and git status followed by dollar
 # export PROMPT_COMMAND='__git_ps1 "\u@\h:\w" "\\\$ "'
 
-dotdir="$(cd "$(dirname "$1")"; pwd)$(basename "/$1")"
+dotdir="$(cd "$(dirname "$1/")"; pwd)$(basename "/$1")"
 homedir=$HOME
 
 #extglob for negative pattern matching, dotglob to match dotfiles
