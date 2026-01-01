@@ -27,6 +27,14 @@ if command -v gh &> /dev/null && gh extension list | grep -q "github/gh-copilot"
     eval "$(gh copilot alias -- bash)" 
 fi
 
+# Check for Copilot CLI and add ghc alias
+if command -v copilot &> /dev/null; then
+    echo "Copilot CLI alias ghc available"
+    ghc() {
+        copilot -p "$*" --allow-all-tools --model gpt-5-mini
+    }
+fi
+
 #if run.sh has been run, then git completions and custom shell prompt scripts should be avalailable
 # if [ -f ~/.git-completion.bash ]; then
 #     echo "completions: git"
@@ -37,6 +45,21 @@ fi
 #     echo "completions: git-prompt"
 #     source ~/.git-prompt.sh
 # fi
+
+# Source git-prompt.sh from various possible locations (NixOS, Debian/Ubuntu, etc.)
+GIT_PROMPT_PATHS=(
+    "$HOME/.git-prompt.sh"
+    "/usr/share/git-core/contrib/completion/git-prompt.sh"
+    "/run/current-system/sw/share/git/contrib/completion/git-prompt.sh"
+    "/etc/bash_completion.d/git-prompt"
+)
+
+for prompt_script in "${GIT_PROMPT_PATHS[@]}"; do
+    if [ -f "$prompt_script" ]; then
+        source "$prompt_script"
+        break
+    fi
+done
 # 
 # # 1password completions
 # if command -v op &> /dev/null; then 
