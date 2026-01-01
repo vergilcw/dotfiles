@@ -27,6 +27,19 @@ setup_symlinks() {
     #(a)rchive, (v)erbose, (s)ymlink, ~~(f)orce~~, (b)ackup
     cp -avsb "$file" "$homedir"
   done
+
+  # Handle .config directory separately to merge contents
+  if [ -d "$dotdir/.config" ]; then
+    echo "Symlinking .config files..."
+    mkdir -p "$homedir/.config"
+    # Use find to recursively symlink files in .config
+    find "$dotdir/.config" -type f | while read -r config_file; do
+        rel_path="${config_file#$dotdir/.config/}"
+        target_dir="$homedir/.config/$(dirname "$rel_path")"
+        mkdir -p "$target_dir"
+        cp -avsb "$config_file" "$target_dir/$(basename "$config_file")"
+    done
+  fi
 }
 
 # Skip installation on NixOS

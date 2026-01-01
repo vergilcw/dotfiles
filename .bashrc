@@ -11,10 +11,12 @@ LANG="en_US.UTF-8"
 
 # dotfiles/run.sh uses ~/.local/bin as the default bin directory, so make sure it's in
 # PATH:
-BIN="$HOME/.local/bin"
-if [[ ":$PATH:" != *":$BIN:"* ]]; then
-  echo "$BIN not found in PATH. Adding it..."
-  export PATH="$BIN:$PATH"  
+if ! grep -q "ID=nixos" /etc/os-release 2>/dev/null; then
+    BIN="$HOME/.local/bin"
+    if [[ ":$PATH:" != *":$BIN:"* ]]; then
+      echo "$BIN not found in PATH. Adding it..."
+      export PATH="$BIN:$PATH"  
+    fi
 fi
 
 #check whether gh exists and gh copilot is installed, if so then add ghce and ghcs aliases
