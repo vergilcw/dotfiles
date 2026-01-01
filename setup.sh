@@ -7,9 +7,32 @@ mkdir -p "$BIN"
 OS="$(uname -s)"
 ARCH="$(uname -m)"
 
+setup_symlinks() {
+  dotdir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  homedir=$HOME
+
+  echo "Symlinking dotfiles from $dotdir to $homedir..."
+  # Iterate over all dotfiles
+  for file in "$dotdir"/.*; do
+    name=$(basename "$file")
+    
+    # Skip . and ..
+    [[ "$name" == "." || "$name" == ".." ]] && continue
+    
+    # Skip specific version control and temporary files
+    # equivalent to: .!(@(|.)|git|gitignore|*swp|git-completion)
+    [[ "$name" == ".git" || "$name" == ".gitignore" || "$name" == ".git-completion" ]] && continue
+    [[ "$name" == *.swp ]] && continue
+
+    #(a)rchive, (v)erbose, (s)ymlink, ~~(f)orce~~, (b)ackup
+    cp -avsb "$file" "$homedir"
+  done
+}
+
 # Skip installation on NixOS
 if [ -f /etc/os-release ] && grep -q 'ID=nixos' /etc/os-release; then
   echo "NixOS detected. Skipping binary downloads (assume nix will be used)."
+  setup_symlinks
   exit 0
 fi
 
@@ -147,13 +170,5 @@ echo "All binaries are now executable!"
 # # current directory, and git status followed by dollar
 # export PROMPT_COMMAND='__git_ps1 "\u@\h:\w" "\\\$ "'
 
-dotdir="$(cd "$(dirname "$1/")"; pwd)$(basename "/$1")"
-homedir=$HOME
-
-#extglob for negative pattern matching, dotglob to match dotfiles
-shopt -s extglob
-#(a)rchive, (v)erbose, (s)ymlink, ~~(f)orce~~, (b)ackup
-cp -avsb $dotdir/.!(@(|.)|git|gitignore|*swp|git-completion) $homedir 
-# (all dotfiles except not ., .., .git, .gitignore, etc)
-shopt -u extglob
+setup_symlinks
 

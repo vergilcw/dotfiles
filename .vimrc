@@ -95,3 +95,17 @@ syntax enable
 "colorscheme base16-default-dark
 "colorscheme solarized
 set background=dark
+" Use system clipboard by default
+set clipboard=unnamedplus
+
+" Force OSC 52 for clipboard operations (works over Mosh/SSH)
+" This function sends the OSC 52 escape sequence to the terminal
+function! Osc52Copy()
+  let b64 = system("echo -n " . shellescape(@") . " | base64 | tr -d '\\n'")
+  let s = "\e]52;c;" . b64 . "\x07"
+  " Send to terminal directly
+  call system("printf '" . s . "' > /dev/tty")
+endfunction
+
+" Automatically use OSC 52 when yanking
+autocmd TextYankPost * if v:event.operator == 'y' | call Osc52Copy() | endif
