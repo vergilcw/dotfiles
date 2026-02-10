@@ -11,6 +11,14 @@ setup_symlinks() {
   dotdir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
   homedir=$HOME
 
+  # Determine cp flags based on OS
+  # macOS cp doesn't support -b (backup), so we use -f (force) instead
+  if [[ "$OS" == "Darwin" ]]; then
+    CP_ARGS="-avsf"
+  else
+    CP_ARGS="-avsb"
+  fi
+
   echo "Symlinking dotfiles from $dotdir to $homedir..."
   # Iterate over all dotfiles
   for file in "$dotdir"/.*; do
@@ -21,11 +29,11 @@ setup_symlinks() {
     
     # Skip specific version control and temporary files
     # equivalent to: .!(@(|.)|git|gitignore|*swp|git-completion)
-    [[ "$name" == ".git" || "$name" == ".gitignore" || "$name" == ".git-completion" ]] && continue
+    [[ "$name" == ".git" || "$name" == ".gitignore" || "$name" == ".git-completion" || "$name" == ".config" || "$name" == ".DS_Store" ]] && continue
     [[ "$name" == *.swp ]] && continue
 
     #(a)rchive, (v)erbose, (s)ymlink, ~~(f)orce~~, (b)ackup
-    cp -avsb "$file" "$homedir"
+    cp $CP_ARGS "$file" "$homedir"
   done
 
   # Handle .config directory separately to merge contents
@@ -37,7 +45,7 @@ setup_symlinks() {
         rel_path="${config_file#$dotdir/.config/}"
         target_dir="$homedir/.config/$(dirname "$rel_path")"
         mkdir -p "$target_dir"
-        cp -avsb "$config_file" "$target_dir/$(basename "$config_file")"
+        cp $CP_ARGS "$config_file" "$target_dir/$(basename "$config_file")"
     done
   fi
 }
@@ -45,6 +53,13 @@ setup_symlinks() {
 # Skip installation on NixOS
 if [ -f /etc/os-release ] && grep -q 'ID=nixos' /etc/os-release; then
   echo "NixOS detected. Skipping binary downloads (assume nix will be used)."
+  setup_symlinks
+  exit 0
+fi
+
+# Skip installation on macOS (nix-darwin)
+if [[ "$OS" == "Darwin" ]]; then
+  echo "macOS detected. Skipping binary downloads (assume nix-darwin is used)."
   setup_symlinks
   exit 0
 fi
