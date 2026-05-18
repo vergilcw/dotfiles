@@ -57,6 +57,13 @@ if [ -f /etc/os-release ] && grep -q 'ID=nixos' /etc/os-release; then
   exit 0
 fi
 
+# Skip installation on GitHub Codespaces
+if [[ "$CODESPACES" == "true" ]]; then
+  echo "GitHub Codespaces detected. Skipping binary downloads (assume devcontainer features are used)."
+  setup_symlinks
+  exit 0
+fi
+
 # Skip installation on macOS (nix-darwin)
 if [[ "$OS" == "Darwin" ]]; then
   echo "macOS detected. Skipping binary downloads (assume nix-darwin is used)."
