@@ -1,202 +1,61 @@
 #!/usr/bin/env bash
+# Configuration-only setup: links dotfiles and the first-use launchers
+# (fish, zellij, nvim) into $HOME. No tools are downloaded or installed here;
+# the launchers fetch pinned releases the first time they are run explicitly.
+# macOS and NixOS keep their external provisioning and get no launchers.
 
-BIN="$HOME/.local/bin"
-mkdir -p "$BIN"
+set -u
 
-# Detect platform/arch
 OS="$(uname -s)"
-ARCH="$(uname -m)"
+dotdir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+homedir=$HOME
+
+# macOS cp doesn't support -b (backup), so we use -f (force) instead
+if [[ "$OS" == "Darwin" ]]; then
+  CP_ARGS="-avsf"
+else
+  CP_ARGS="-avsb"
+fi
+
+use_launchers=1
+if [[ "$OS" != "Linux" ]]; then
+  use_launchers=0
+elif [ -f /etc/os-release ] && grep -q 'ID=nixos' /etc/os-release; then
+  use_launchers=0
+  echo "NixOS detected. Skipping launchers (assume nix provides tools)."
+fi
+[[ "$OS" == "Darwin" ]] && echo "macOS detected. Skipping launchers (assume nix-darwin is used)."
+
+# Symlink every file under a directory of the repo, preserving structure.
+link_tree() {
+  local rel=$1 f rel_path target_dir
+  [ -d "$dotdir/$rel" ] || return 0
+  find "$dotdir/$rel" -type f | while IFS= read -r f; do
+    rel_path="${f#"$dotdir"/}"
+    target_dir="$homedir/$(dirname "$rel_path")"
+    mkdir -p "$target_dir"
+    cp $CP_ARGS "$f" "$target_dir/$(basename "$f")"
+  done
+}
 
 setup_symlinks() {
-  dotdir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-  homedir=$HOME
-
-  # Determine cp flags based on OS
-  # macOS cp doesn't support -b (backup), so we use -f (force) instead
-  if [[ "$OS" == "Darwin" ]]; then
-    CP_ARGS="-avsf"
-  else
-    CP_ARGS="-avsb"
-  fi
-
   echo "Symlinking dotfiles from $dotdir to $homedir..."
-  # Iterate over all dotfiles
+  local file name
   for file in "$dotdir"/.*; do
     name=$(basename "$file")
-    
-    # Skip . and ..
     [[ "$name" == "." || "$name" == ".." ]] && continue
-    
-    # Skip specific version control and temporary files
-    # equivalent to: .!(@(|.)|git|gitignore|*swp|git-completion)
-    [[ "$name" == ".git" || "$name" == ".gitignore" || "$name" == ".git-completion" || "$name" == ".config" || "$name" == ".DS_Store" ]] && continue
+    [[ "$name" == ".git" || "$name" == ".gitignore" || "$name" == ".git-completion" || "$name" == ".config" || "$name" == ".local" || "$name" == ".DS_Store" ]] && continue
     [[ "$name" == *.swp ]] && continue
-
-    #(a)rchive, (v)erbose, (s)ymlink, ~~(f)orce~~, (b)ackup
     cp $CP_ARGS "$file" "$homedir"
   done
 
-  # Handle .config directory separately to merge contents
-  if [ -d "$dotdir/.config" ]; then
-    echo "Symlinking .config files..."
-    mkdir -p "$homedir/.config"
-    # Use find to recursively symlink files in .config
-    find "$dotdir/.config" -type f | while read -r config_file; do
-        rel_path="${config_file#$dotdir/.config/}"
-        target_dir="$homedir/.config/$(dirname "$rel_path")"
-        mkdir -p "$target_dir"
-        cp $CP_ARGS "$config_file" "$target_dir/$(basename "$config_file")"
-    done
+  echo "Symlinking .config files..."
+  link_tree .config
+
+  if [[ $use_launchers == 1 ]]; then
+    echo "Symlinking launchers into ~/.local/bin..."
+    link_tree .local/bin
   fi
 }
-
-# Skip installation on NixOS
-if [ -f /etc/os-release ] && grep -q 'ID=nixos' /etc/os-release; then
-  echo "NixOS detected. Skipping binary downloads (assume nix will be used)."
-  setup_symlinks
-  exit 0
-fi
-
-# Skip installation on macOS (nix-darwin)
-if [[ "$OS" == "Darwin" ]]; then
-  echo "macOS detected. Skipping binary downloads (assume nix-darwin is used)."
-  setup_symlinks
-  exit 0
-fi
-
-# Function to get the latest release URL from GitHub
-latest_url() {
-  curl -s "https://api.github.com/repos/$1/releases/latest" |
-    grep "browser_download_url" |
-    grep -i "$2" |
-    cut -d '"' -f 4
-}
-
-
-
-case "$OS" in
-  Linux)
-    if [[ "$ARCH" == "x86_64" ]]; then
-      FISH_PATTERN="fish-static-amd64.*\.tar\.xz"
-      ZELLIJ_PATTERN="zellij-x86_64-unknown-linux-musl\.tar\.gz"
-      NVIM_PATTERN="nvim-linux-x86_64.appimage\"" # \" to avoid appimage.zsync
-    elif [[ "$ARCH" == "aarch64" || "$ARCH" == "arm64" ]]; then
-      FISH_PATTERN="fish-static-aarch64.*\.tar\.xz"
-      ZELLIJ_PATTERN="zellij-aarch64-unknown-linux-musl\.tar\.gz"
-      NVIM_PATTERN="nvim-linux-arm64.appimage\"" # $ to avoid appimage.zsync
-    else
-      echo "Unsupported Linux architecture: $ARCH"
-      exit 1
-    fi
-    ;;
-  *)
-    echo "Unsupported OS: $OS"
-    exit 1
-    ;;
-esac
-
-# Install Fish (static build)
-if ! command -v fish &> /dev/null; then
-  echo "Fish not found. Installing Fish shell..."
-  url=$(latest_url fish-shell/fish-shell "$FISH_PATTERN")
-  if [[ -z "$url" ]]; then
-    echo "Could not find Fish binary for your architecture, tried: $url"
-    exit 1
-  fi
-  curl -Lo fish.tar.xz "$url"
-  echo "Extracting Fish shell..."
-  tar -xJf fish.tar.xz -C "$BIN"
-  chmod +x "$BIN/fish"
-  rm fish.tar.xz
-  echo "Fish shell installed successfully!"
-else
-  echo "Fish shell is already installed."
-fi
-
-# Install Zellij (musl static build)
-if ! command -v zellij &> /dev/null; then
-  echo "Zellij not found. Installing Zellij..."
-  url=$(latest_url zellij-org/zellij "$ZELLIJ_PATTERN")
-  if [[ -z "$url" ]]; then
-    echo "Could not find Zellij binary for your architecture, tried: $url"
-    exit 1
-  fi
-  curl -Lo zellij.tar.gz "$url"
-  echo "Extracting Zellij..."
-  tar -xzf zellij.tar.gz -C "$BIN"
-  chmod +x "$BIN/zellij"
-  rm zellij.tar.gz
-  echo "Zellij installed successfully!"
-else
-  echo "Zellij is already installed."
-fi
-
-
-# Install Neovim
-if ! command -v nvim &> /dev/null; then
-  echo "Neovim not found. Installing Neovim..."
-  if [[ "$OS" == "Linux" ]]; then
-    url=$(latest_url neovim/neovim "$NVIM_PATTERN")
-    if [[ -z "$url" ]]; then
-      echo "Could not find Neovim binary for your architecture, tried: $url"
-      exit 1
-    fi
-    curl -Lo nvim.appimage "$url"
-    chmod +x nvim.appimage
-
-    # Check if FUSE is available
-    if ./nvim.appimage --appimage-version &> /dev/null; then
-      echo "FUSE is enabled. Using AppImage directly."
-      mv nvim.appimage "$BIN/nvim"
-    else
-      echo "FUSE is not enabled. Extracting AppImage..."
-      ./nvim.appimage --appimage-extract
-      if [[ -d squashfs-root ]]; then
-        mv squashfs-root/usr/bin/nvim "$BIN/nvim"
-        rm -rf squashfs-root nvim.appimage
-      else
-        echo "Failed to extract AppImage. Exiting."
-        exit 1
-      fi
-    fi
-  elif [[ "$OS" == "Darwin" ]]; then
-    url=$(latest_url neovim/neovim "$NVIM_PATTERN")
-    if [[ -z "$url" ]]; then
-      echo "Could not find Neovim binary for your architecture, tried: $url"
-      exit 1
-    fi
-    curl -Lo nvim-macos.tar.gz "$url"
-    tar -xzf nvim-macos.tar.gz
-    mv nvim-osx64/bin/nvim "$BIN/nvim" 2>/dev/null || mv nvim-macos*/bin/nvim "$BIN/nvim"
-    rm -rf nvim-macos.tar.gz nvim-osx64 nvim-macos*
-  fi
-  echo "Neovim installed successfully!"
-else
-  echo "Neovim is already installed."
-fi
-
-
-# Ensure all binaries in $BIN are executable
-# TODO: side effect of this is maybe it makes things executable that weren't
-# meant to be?
-echo "Making sure all binaries in $BIN are executable..."
-chmod +x "$BIN"/*
-echo "All binaries are now executable!"
-
-
-# Download Git Auto-Completion
-# curl "https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash" > .git-completion.bash
-# curl "https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh" > .git-prompt.sh
-
-
-# # Add Git Auto-Completion to .bashrc
-# export GIT_PS1_SHOWUNTRACKEDFILES=true
-# export GIT_PS1_SHOWCOLORHINTS=true
-# export GIT_PS1_SHOWDIRTYSTATE=true
-# 
-# # will show username, at-sign, host, colon, 
-# # current directory, and git status followed by dollar
-# export PROMPT_COMMAND='__git_ps1 "\u@\h:\w" "\\\$ "'
 
 setup_symlinks
-

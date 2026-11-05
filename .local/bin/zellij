@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# First-use launcher for zellij; see tools/lazy-tool.sh.
+self=$(readlink -f "${BASH_SOURCE[0]}")
+. "$(dirname "$(dirname "$(dirname "$self")")")/tools/lazy-tool.sh" || exit 1
+lazy_tool_main zellij "$self" "$@"
+exit $?
